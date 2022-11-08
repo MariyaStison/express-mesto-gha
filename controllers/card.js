@@ -5,7 +5,7 @@ const { dataErrCode, notFoundErrCode, defaultErrCode } = require('../constants')
 module.exports.getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.send({ data: cards }))
-    .catch((err) => res.status(defaultErrCode).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(defaultErrCode).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.deleteCard = (req, res) => {

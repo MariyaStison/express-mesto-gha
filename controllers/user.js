@@ -5,7 +5,7 @@ const { dataErrCode, notFoundErrCode, defaultErrCode } = require('../constants')
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send({ data: users }))
-    .catch((err) => res.status(defaultErrCode).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(defaultErrCode).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.getUser = (req, res) => {
