@@ -1,15 +1,11 @@
 const User = require('../models/user');
 
-const dataErrCode = 400;
-
-const notFoundErrCode = 404;
-
-const defaultErrCode = 500;
+const { dataErrCode, notFoundErrCode, defaultErrCode } = require('../constants');
 
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send({ data: users }))
-    .catch((err) => res.status(defaultErrCode).send({ message: `Произошла ошибка: ${err.massage}` }));
+    .catch((err) => res.status(defaultErrCode).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.getUser = (req, res) => {
@@ -26,7 +22,7 @@ module.exports.getUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') res.status(dataErrCode).send({ message: 'Неверный формат запроса' });
-      else res.status(defaultErrCode).send({ message: `Произошла ошибка: ${err.name} ${err.massage}` });
+      else res.status(defaultErrCode).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -37,7 +33,7 @@ module.exports.createUser = (req, res) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') res.status(dataErrCode).send({ message: 'Переданы некорректные данные в методы создания пользователя' });
-      else res.status(defaultErrCode).send({ message: `Произошла ошибка: ${err.name} ${err.massage}` });
+      else res.status(defaultErrCode).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -64,7 +60,7 @@ module.exports.updateUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') res.status(dataErrCode).send({ message: ` ${err.name} Переданы некорректные данные в методы обновления пользователя` });
-      else res.status(defaultErrCode).send({ message: `Произошла ошибка: ${err.name} ${err.massage}` });
+      else res.status(defaultErrCode).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -91,6 +87,6 @@ module.exports.updateAvatar = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') res.status(dataErrCode).send({ message: 'Переданы некорректные данные в методы обновления аватара' });
-      else res.status(defaultErrCode).send({ message: `Произошла ошибка: ${err.name} ${err.massage}` });
+      else res.status(defaultErrCode).send({ message: 'Произошла ошибка' });
     });
 };

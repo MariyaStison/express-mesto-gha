@@ -1,15 +1,11 @@
 const Card = require('../models/card');
 
-const dataErrCode = 400;
-
-const notFoundErrCode = 404;
-
-const defaultErrCode = 500;
+const { dataErrCode, notFoundErrCode, defaultErrCode } = require('../constants');
 
 module.exports.getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.send({ data: cards }))
-    .catch((err) => res.status(defaultErrCode).send({ message: `Произошла ошибка: ${err.name} ${err.massage}` }));
+    .catch((err) => res.status(defaultErrCode).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.deleteCard = (req, res) => {
@@ -28,7 +24,7 @@ module.exports.deleteCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') return res.status(dataErrCode).send({ message: 'Неверный формат запроса' });
-      return res.status(defaultErrCode).send({ message: `Произошла ошибка: ${err.name} ${err.massage}` });
+      return res.status(defaultErrCode).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -47,7 +43,7 @@ module.exports.createCard = (req, res) => {
     }))
     .catch((err) => {
       if (err.name === 'ValidationError') return res.status(dataErrCode).send({ message: 'Переданы некорректные данные в методы создания карточки' });
-      return res.status(defaultErrCode).send({ message: `Произошла ошибка: ${err.name} ${err.massage}` });
+      return res.status(defaultErrCode).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -70,9 +66,8 @@ module.exports.putLike = (req, res) => {
       } else res.status(notFoundErrCode).send({ message: 'Карточка не найдена' });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') return res.status(dataErrCode).send({ message: 'Переданы некорректные данные в методы добавления лайка' });
       if (err.name === 'CastError') return res.status(dataErrCode).send({ message: 'Неверный формат запроса' });
-      return res.status(defaultErrCode).send({ message: `Произошла ошибка: ${err.name} ${err.massage}` });
+      return res.status(defaultErrCode).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -96,6 +91,6 @@ module.exports.deleteLike = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') return res.status(dataErrCode).send({ message: 'Неверный формат запроса' });
-      return res.status(defaultErrCode).send({ message: `Произошла ошибка: ${err.name} ${err.massage}` });
+      return res.status(defaultErrCode).send({ message: 'Произошла ошибка' });
     });
 };
