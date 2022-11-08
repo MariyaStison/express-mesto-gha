@@ -6,6 +6,8 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 
+const notFoundErrCode = 404;
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -23,6 +25,9 @@ app.use('/users', require('./routes/user'));
 
 app.use('/cards', require('./routes/card'));
 
+app.all('/*', (req, res) => {
+  res.status(notFoundErrCode).send({ message: 'Неверный адрес' });
+});
+
 app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
 });

@@ -25,7 +25,7 @@ module.exports.getUser = (req, res) => {
       } else res.status(notFoundErrCode).send({ message: 'Пользователь не найден' });
     })
     .catch((err) => {
-      if (err.name === 'CastError') res.status(notFoundErrCode).send({ message: 'Пользователь не найден' });
+      if (err.name === 'CastError') res.status(dataErrCode).send({ message: 'Неверный формат запроса' });
       else res.status(defaultErrCode).send({ message: `Произошла ошибка: ${err.name} ${err.massage}` });
     });
 };

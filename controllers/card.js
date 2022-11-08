@@ -27,7 +27,7 @@ module.exports.deleteCard = (req, res) => {
       } else res.status(notFoundErrCode).send({ message: 'Карточка не найдена' });
     })
     .catch((err) => {
-      if (err.name === 'CastError') return res.status(notFoundErrCode).send({ message: 'Карточка не найдена' });
+      if (err.name === 'CastError') return res.status(dataErrCode).send({ message: 'Неверный формат запроса' });
       return res.status(defaultErrCode).send({ message: `Произошла ошибка: ${err.name} ${err.massage}` });
     });
 };
@@ -71,7 +71,7 @@ module.exports.putLike = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') return res.status(dataErrCode).send({ message: 'Переданы некорректные данные в методы добавления лайка' });
-      if (err.name === 'CastError') return res.status(notFoundErrCode).send({ message: 'Карточка не найдена' });
+      if (err.name === 'CastError') return res.status(dataErrCode).send({ message: 'Неверный формат запроса' });
       return res.status(defaultErrCode).send({ message: `Произошла ошибка: ${err.name} ${err.massage}` });
     });
 };
@@ -95,7 +95,7 @@ module.exports.deleteLike = (req, res) => {
       } else res.status(notFoundErrCode).send({ message: 'Карточка не найдена' });
     })
     .catch((err) => {
-      if (err.name === 'CastError') return res.status(notFoundErrCode).send({ message: 'Карточка не найдена' });
+      if (err.name === 'CastError') return res.status(dataErrCode).send({ message: 'Неверный формат запроса' });
       return res.status(defaultErrCode).send({ message: `Произошла ошибка: ${err.name} ${err.massage}` });
     });
 };
