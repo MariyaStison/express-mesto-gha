@@ -26,7 +26,13 @@ module.exports.createUser = (req, res, next) => {
       password: hash,
     }))
     .then((user) => {
-      res.send({ data: user });
+      res.send({
+        email: user.email,
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        _id: user._id,
+      });
     })
     .catch((err) => {
       if (err.code === 11000) {
@@ -64,6 +70,21 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 module.exports.getUser = (req, res, next) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      if (user) {
+        res.send({
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+          _id: user._id,
+        });
+      } else throw new NotFoundErr('Пользователь не найден');
+    })
+    .catch(next);
+};
+
+module.exports.getMe = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (user) {
