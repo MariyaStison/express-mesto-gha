@@ -55,7 +55,7 @@ app.use('/users', require('./routes/user'));
 
 app.use('/cards', require('./routes/card'));
 
-app.all('/*', (req, res, next) => {
+app.all('/*', () => {
   throw new NotFoundErr('Неверный адрес');
 });
 
