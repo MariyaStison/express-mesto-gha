@@ -72,14 +72,15 @@ module.exports.getUsers = (req, res, next) => {
 module.exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .then((user) => {
-      if (user) {
-        res.send({
-          name: user.name,
-          about: user.about,
-          avatar: user.avatar,
-          _id: user._id,
-        });
-      } else throw new NotFoundErr('Пользователь не найден');
+      if (!user) {
+        throw new NotFoundErr('Пользователь не найден');
+      }
+      res.send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        _id: user._id,
+      });
     })
     .catch(next);
 };
@@ -87,15 +88,16 @@ module.exports.getUser = (req, res, next) => {
 module.exports.getMe = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
-      if (user) {
-        res.send({
-          email: user.email,
-          name: user.name,
-          about: user.about,
-          avatar: user.avatar,
-          _id: user._id,
-        });
-      } else throw new NotFoundErr('Пользователь не найден');
+      if (!user) {
+        throw new NotFoundErr('Пользователь не найден');
+      }
+      res.send({
+        email: user.email,
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        _id: user._id,
+      });
     })
     .catch(next);
 };
@@ -141,14 +143,15 @@ module.exports.updateAvatar = (req, res, next) => {
     },
   )
     .then((user) => {
-      if (user) {
-        res.send({
-          name: user.name,
-          about: user.about,
-          avatar: user.avatar,
-          _id: user._id,
-        });
-      } else throw new NotFoundErr('Пользователь не найден');
+      if (!user) {
+        throw new NotFoundErr('Пользователь не найден');
+      }
+      res.send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        _id: user._id,
+      });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

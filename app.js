@@ -31,10 +31,8 @@ app.post('/signin', celebrate({
     email: Joi
       .string()
       .required()
-      .email()
-      .min(2)
-      .max(30),
-    password: Joi.string().required().min(8),
+      .email(),
+    password: Joi.string().required(),
   }),
 }), login);
 
@@ -43,13 +41,11 @@ app.post('/signup', celebrate({
     email: Joi
       .string()
       .required()
-      .email()
-      .min(2)
-      .max(30),
-    password: Joi.string().required().min(8),
+      .email(),
+    password: Joi.string().required(),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().min(2).max(30).regex(/^https?:\/\/(www\.)?(\w|[-._~:/?#[\]@!$&'()*+,;=])+\.\w+((\w|[-._~:/?#[\]@!$&'()*+,;=])+)+#?/),
+    avatar: Joi.string().min(2).regex(/^https?:\/\/(www\.)?(\w|[-._~:/?#[\]@!$&'()*+,;=])+\.\w+((\w|[-._~:/?#[\]@!$&'()*+,;=])+)+#?/),
   }),
 }), createUser);
 
@@ -60,8 +56,7 @@ app.use('/users', require('./routes/user'));
 app.use('/cards', require('./routes/card'));
 
 app.all('/*', (req, res, next) => {
-  Promise.reject(new NotFoundErr('Неверный адрес'))
-    .catch(next);
+  throw new NotFoundErr('Неверный адрес');
 });
 
 app.use(errors());

@@ -11,10 +11,16 @@ module.exports.getCards = (req, res, next) => {
 };
 
 module.exports.deleteCard = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.id)
+  Card.findById(req.params.id)
     .then((card) => {
-      if (card) {
-        if (card.owner.valueOf() === req.user._id) {
+      if (!card) {
+        throw new NotFoundErr('Карточка не найдена');
+      }
+      if (!(card.owner.valueOf() === req.user._id)) {
+        throw new ForbiddenErr('Недостаточно прав для выполнения операции');
+      }
+      card.remove()
+        .then(() => {
           res.send({
             createdAt: card.createdAt,
             likes: card.likes,
@@ -23,15 +29,9 @@ module.exports.deleteCard = (req, res, next) => {
             owner: card.owner,
             _id: card._id,
           });
-        } else throw new ForbiddenErr('Недостаточно прав для выполнения операции');
-      } else throw new NotFoundErr('Карточка не найдена');
+        });
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        const error = new DataErr('Неверный формат запроса');
-        next(error);
-      } else next(err);
-    });
+    .catch(next);
 };
 
 module.exports.createCard = (req, res, next) => {
@@ -62,23 +62,19 @@ module.exports.putLike = (req, res, next) => {
     { new: true },
   )
     .then((card) => {
-      if (card) {
-        res.send({
-          createdAt: card.createdAt,
-          likes: card.likes,
-          link: card.link,
-          name: card.name,
-          owner: card.owner,
-          _id: card._id,
-        });
-      } else throw new NotFoundErr('Карточка не найдена');
+      if (!card) {
+        throw new NotFoundErr('Карточка не найдена');
+      }
+      res.send({
+        createdAt: card.createdAt,
+        likes: card.likes,
+        link: card.link,
+        name: card.name,
+        owner: card.owner,
+        _id: card._id,
+      });
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        const error = new DataErr('Неверный формат запроса постановки лайка');
-        next(error);
-      } else next(err);
-    });
+    .catch(next);
 };
 
 module.exports.deleteLike = (req, res, next) => {
@@ -88,21 +84,17 @@ module.exports.deleteLike = (req, res, next) => {
     { new: true },
   )
     .then((card) => {
-      if (card) {
-        res.send({
-          createdAt: card.createdAt,
-          likes: card.likes,
-          link: card.link,
-          name: card.name,
-          owner: card.owner,
-          _id: card._id,
-        });
-      } else throw new NotFoundErr('Карточка не найдена');
+      if (!card) {
+        throw new NotFoundErr('Карточка не найдена');
+      }
+      res.send({
+        createdAt: card.createdAt,
+        likes: card.likes,
+        link: card.link,
+        name: card.name,
+        owner: card.owner,
+        _id: card._id,
+      });
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        const error = new DataErr('Неверный формат запроса снятия лайка');
-        next(error);
-      } else next(err);
-    });
+    .catch(next);
 };
