@@ -16,10 +16,10 @@ module.exports.deleteCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundErr('Карточка не найдена');
       }
-      if (!(card.owner.valueOf() === req.user._id)) {
+      if (card.owner.valueOf() !== req.user._id) {
         throw new ForbiddenErr('Недостаточно прав для выполнения операции');
       }
-      card.remove()
+      return card.remove()
         .then(() => {
           res.send({
             createdAt: card.createdAt,
