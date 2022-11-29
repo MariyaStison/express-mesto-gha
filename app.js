@@ -8,6 +8,8 @@ const cookieParser = require('cookie-parser');
 const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+
 const { PORT = 3000 } = process.env;
 
 const app = express();
@@ -25,6 +27,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
+
+app.use(requestLogger);
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -58,6 +62,8 @@ app.use('/cards', require('./routes/card'));
 app.all('/*', () => {
   throw new NotFoundErr('Неверный адрес');
 });
+
+app.use(errorLogger);
 
 app.use(errors());
 
